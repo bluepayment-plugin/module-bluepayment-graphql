@@ -1,0 +1,29 @@
+{
+  "name": "bluepayment-plugin/module-bluepayment-graphql",
+  "description": "BM payment GraphQL extension for Magento 2.",
+  "type": "magento2-module",
+  "version": "1.0.0",
+  "require": {
+    "bluepayment-plugin/module-bluepayment": "^2.15.0",
+    "magento/framework": "^102||^103",
+    "magento/module-config": "^101.0",
+    "magento/module-sales": "^101.0",
+    "magento/module-store": "^101.0",
+    "magento/module-payment": "^100.2",
+    "magento/module-checkout": "^100.2",
+    "magento/module-quote": "^101",
+    "magento/module-quote-graph-ql": "^100"
+  },
+  "suggest": {
+    "magento/module-graph-ql": "^100"
+  },
+  "minimum-stability": "dev",
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "BlueMedia\\BluePaymentGraphQl\\": ""
+    }
+  }
+}
