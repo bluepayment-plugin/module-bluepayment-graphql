@@ -29,7 +29,7 @@ if [ $COMPOSER_VERSION == $PACKAGE_VERSION ]; then
       -x *.doc*
 
     echo "======================================================================================================"
-    echo "${green}Package ${bold}bm-bluepayment-graph-q-$PACKAGE_VERSION.zip${normal}${green} created"
+    echo "${green}Package ${bold}bm-bluepayment-graph-ql-$PACKAGE_VERSION.zip${normal}${green} created"
 else
     echo "${red}Composer version ${bold}$COMPOSER_VERSION${normal}${red} is not equal to package version ${bold}$PACKAGE_VERSION${normal}"
 fi
