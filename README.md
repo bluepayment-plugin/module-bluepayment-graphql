@@ -2,6 +2,14 @@
 
 Moduł rozszerzający podstawową wersję BlueMedia_BluePayment o API GraphQL.
 
+## Changelog
+### 1.1.1
+- Dodanie whitelabel
+- Oznaczanie kanałów jako "oddzielna metoda płatności"
+
+### 1.0.0
+- Inicjalna wersja
+
 ## Instalacja
 
 ### Poprzez composera
