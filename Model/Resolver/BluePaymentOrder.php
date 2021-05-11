@@ -65,17 +65,14 @@ class BluePaymentOrder implements ResolverInterface
         $payment = $order->getPayment();
 
         $currency = $order->getOrderCurrencyCode();
-        $websiteCode = $order->getStore()->getWebsite()->getCode();
 
         $serviceId = $this->scopeConfig->getValue(
             'payment/bluepayment/' . strtolower($currency) . '/service_id',
-            ScopeInterface::SCOPE_WEBSITE,
-            $websiteCode
+            ScopeInterface::SCOPE_STORE
         );
         $sharedKey = $this->scopeConfig->getValue(
             'payment/bluepayment/' . strtolower($currency) . '/shared_key',
-            ScopeInterface::SCOPE_WEBSITE,
-            $websiteCode
+            ScopeInterface::SCOPE_STORE
         );
 
         $hashData = [$serviceId, $order->getIncrementId(), $sharedKey];

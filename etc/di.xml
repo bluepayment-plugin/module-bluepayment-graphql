@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<config>
+    <type name="Magento\QuoteGraphQl\Model\Resolver\AvailablePaymentMethods">
+        <plugin
+                sortOrder="10"
+                name="bluepaymentGraphQlAvailablePaymentMethods"
+                type="BlueMedia\BluePaymentGraphQl\Plugin\Model\Resolver\AvailablePaymentMethodsPlugin"/>
+    </type>
+
+    <type name="Magento\QuoteGraphQl\Model\Resolver\SelectedPaymentMethod">
+        <plugin
+                sortOrder="10"
+                name="bluepaymentGraphQlSelectedPaymentMethod"
+                type="BlueMedia\BluePaymentGraphQl\Plugin\Model\Resolver\SelectedPaymentMethodPlugin"/>
+    </type>
+</config>
