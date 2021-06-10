@@ -6,6 +6,7 @@ Moduł rozszerzający podstawową wersję BlueMedia_BluePayment o API GraphQL.
 ### 1.1.1
 - Dodanie whitelabel
 - Oznaczanie kanałów jako "oddzielna metoda płatności"
+- Wsparcie dla Magento 2.3
 
 ### 1.0.0
 - Inicjalna wersja
