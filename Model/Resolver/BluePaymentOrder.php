@@ -72,20 +72,10 @@ class BluePaymentOrder implements ResolverInterface
         }
 
         return [
-            'created_at' => $order->getCreatedAt(),
-            'grand_total' => $order->getGrandTotal(),
             'id' => base64_encode($order->getEntityId()),
-            'increment_id' => $order->getIncrementId(),
             'number' => $order->getIncrementId(),
-            'order_date' => $order->getCreatedAt(),
-            'order_number' => $order->getIncrementId(),
             'status' => $order->getStatusLabel(),
-            'invoices' => $order->getInvoiceCollection(),
-            'shipping_method' => $order->getShippingDescription(),
-            'shipping_address' => $this->getOrderShippingAddress($order),
-            'billing_address' => $this->getOrderBillingAddress($order),
-            'payment_methods' => $this->getOrderPaymentMethod($order),
-            'model' => $order,
+            'order_date' => $order->getCreatedAt(),
             'bluepayment_state' => $payment->getAdditionalInformation('bluepayment_state'),
         ];
     }
