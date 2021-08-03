@@ -2,15 +2,6 @@
 
 Moduł rozszerzający podstawową wersję BlueMedia_BluePayment o API GraphQL.
 
-## Changelog
-### 1.1.1
-- Dodanie whitelabel
-- Oznaczanie kanałów jako "oddzielna metoda płatności"
-- Wsparcie dla Magento 2.3
-
-### 1.0.0
-- Inicjalna wersja
-
 ## Instalacja
 
 ### Poprzez composera
@@ -33,3 +24,10 @@ unzip -o -d app/code/BlueMedia/BluePaymentGraphQl bm-bluepayment-graph-ql-*.zip 
 - ```bin/magento setup:di:compile```
 - ```bin/magento cache:flush```
 2. Moduł został aktywowany.
+
+## Tabela kompatybilności
+
+| BlueMedia_BluePayment  | BlueMedia_BluePaymentGraphQl | bluemedia/bluepayment-pwa (JS) | Magento | Magento PWA |
+| ------------- | ------------- | ------------- | ------------- | ------------- |
+| 2.16.0 | 1.2.0 | 0.0.4 | 2.4.2 | 10.x |
+| 2.15.0 | 1.1.0 | 0.0.3 | 2.4.2 | 10.x |

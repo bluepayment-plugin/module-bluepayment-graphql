@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace BlueMedia\BluePaymentGraphQl\Model\Resolver;
 
 use BlueMedia\BluePayment\Model\ConfigProvider;
-use BlueMedia\BluePayment\Model\Gateways;
+use BlueMedia\BluePayment\Model\Gateway;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
@@ -43,28 +43,27 @@ class BluePaymentGateways implements ResolverInterface
         return $gateways;
     }
 
-    protected function available(Gateways $gateway)
+    protected function available(Gateway $gateway)
     {
         return $gateway->getGatewayId() != ConfigProvider::AUTOPAY_GATEWAY_ID
-            && !$gateway->getIsSeparatedMethod();
+            && !$gateway->isSeparatedMethod();
     }
 
     /**
-     * @param Gateways $gateway
-     * @param array $gateways
+     * @param Gateway $gateway
      * @return array
      */
-    protected function prepareGateway(Gateways $gateway): array
+    protected function prepareGateway(Gateway $gateway): array
     {
         return [
             'gateway_id' => $gateway->getGatewayId(),
-            'name' => $gateway->getGatewayName(),
+            'name' => $gateway->getName(),
             'bank' => $gateway->getBankName(),
-            'description' => $gateway->getGatewayDescription(),
-            'sort_order' => $gateway->getGatewaySortOrder(),
-            'type' => $gateway->getGatewayType(),
-            'logo_url' => (bool)$gateway->getUseOwnLogo() ? $gateway->getGatewayLogoPath() : $gateway->getGatewayLogoUrl(),
-            'is_separated_method' => $gateway->getIsSeparatedMethod()
+            'description' => $gateway->getDescription(),
+            'sort_order' => $gateway->getSortOrder(),
+            'type' => $gateway->getType(),
+            'logo_url' => $gateway->getUseOwnLogo() ? $gateway->getLogoPath() : $gateway->getLogoUrl(),
+            'is_separated_method' => $gateway->isSeparatedMethod()
         ];
     }
 }

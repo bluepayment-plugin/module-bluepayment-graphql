@@ -12,6 +12,12 @@ type Query {
         value: Float!,
         currency: CurrencyEnum!
     ): [BluePaymentGateway]! @resolver(class: "BlueMedia\\BluePaymentGraphQl\\Model\\Resolver\\BluePaymentGateways")
+
+    bluepaymentAgreements (
+        gateway_id: Int!,
+        currency: CurrencyEnum!,
+        locale: String!
+    ): [BluePaymentAgreement]! @resolver(class: "BlueMedia\\BluePaymentGraphQl\\Model\\Resolver\\BluePaymentAgreements")
 }
 
 input PaymentMethodInput {
@@ -21,7 +27,8 @@ input PaymentMethodInput {
 input BluepaymentInput {
     create_payment: Boolean!,
     back_url: String!,
-    gateway_id: Int
+    gateway_id: Int,
+    agreements_ids: String
 }
 
 type BluePaymentOrder {
@@ -29,7 +36,19 @@ type BluePaymentOrder {
     order_date: String! @doc(description: "The date the order was placed")
     status: String! @doc(description: "The current status of the order")
     number: String! @doc(description: "The order number")
-    bluepayment_state: String @doc(description: "Payment state (PENDING, SUCCESS, FAILURE)")
+    items: [OrderItemInterface] @doc(description: "An array containing the items purchased in this order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderItems")
+    total: OrderTotal @doc(description: "Contains details about the calculated totals for this order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderTotal")
+    invoices: [Invoice]! @doc(description: "A list of invoices for the order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Invoices")
+    shipments: [OrderShipment] @doc(description: "A list of shipments for the order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Shipments")
+    credit_memos: [CreditMemo] @doc(description: "A list of credit memos") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\CreditMemos")
+    payment_methods: [OrderPaymentMethod] @doc(description: "Payment details for the order")
+    shipping_address: OrderAddress @doc(description: "The shipping address for the order")
+    billing_address: OrderAddress @doc(description: "The billing address for the order")
+    carrier: String @doc(description: "The shipping carrier for the order delivery") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\CustomerOrders\\Carrier")
+    shipping_method: String @doc(description: "The delivery method for the order")
+    comments: [SalesCommentItem] @doc(description: "Comments about the order")
+
+    bluepayment_state: String
 }
 
 type BluePaymentGateway {
@@ -40,4 +59,19 @@ type BluePaymentGateway {
     type: String
     logo_url: String!
     is_separated_method: Boolean!
+}
+
+type BluePaymentAgreement {
+    regulation_id: ID!
+    type: String!
+    url: String
+    label_list: [BluePaymentAgreementLabel]
+}
+
+type BluePaymentAgreementLabel {
+    label_id: ID!
+    label: String
+    placement: String!
+    show_checkbox: Boolean!
+    checkbox_required: Boolean!
 }

@@ -2,7 +2,7 @@
   "name": "bluepayment-plugin/module-bluepayment-graphql",
   "description": "BM payment GraphQL extension for Magento 2.",
   "type": "magento2-module",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "require": {
     "bluepayment-plugin/module-bluepayment": "^2.15.0",
     "magento/framework": "^102||^103",

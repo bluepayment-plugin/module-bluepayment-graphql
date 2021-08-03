@@ -3,7 +3,7 @@
 namespace BlueMedia\BluePaymentGraphQl\Plugin\Model\Resolver;
 
 use BlueMedia\BluePayment\Model\ConfigProvider;
-use BlueMedia\BluePayment\Model\Gateways;
+use BlueMedia\BluePayment\Model\Gateway;
 use BlueMedia\BluePayment\Model\Payment;
 use Closure;
 use Magento\Framework\Exception\LocalizedException;
@@ -53,7 +53,7 @@ class SelectedPaymentMethodPlugin
             $gateway_id = $payment->getAdditionalInformation('gateway_id');
             $gateways = $this->configProvider->getActiveGateways($cart->getGrandTotal(), $cart->getQuoteCurrencyCode());
             foreach ($gateways as $gateway) {
-                /** @var Gateways $gateway */
+                /** @var Gateway $gateway */
 
                 if ($gateway->getGatewayId() == $gateway_id) {
                     return [
