@@ -28,17 +28,18 @@ class BluePaymentGateways implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    )
-    {
+    ) {
         $gateways = [];
 
-        foreach ($this->configProvider->getActiveGateways($args['value'], $args['currency']) as $gateway) {
-            if ($this->available($gateway)) {
-                $gateways[] = $this->prepareGateway($gateway);
+        if ($this->configProvider->isGatewaySelectionEnabled()) {
+            foreach ($this->configProvider->getActiveGateways($args['value'], $args['currency']) as $gateway) {
+                if ($this->available($gateway)) {
+                    $gateways[] = $this->prepareGateway($gateway);
+                }
             }
-        }
 
-        $this->configProvider->sortGateways($gateways);
+            $this->configProvider->sortGateways($gateways);
+        }
 
         return $gateways;
     }

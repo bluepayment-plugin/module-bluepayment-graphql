@@ -28,7 +28,7 @@ class AvailablePaymentMethodsPlugin
      */
     public function afterResolve(AvailablePaymentMethods $subject, array $list)
     {
-        if ($this->configProvider->getPaymentConfig()['bluePaymentSeparated']) {
+        if ($this->configProvider->isGatewaySelectionEnabled()) {
             foreach ($this->configProvider->getPaymentConfig()['bluePaymentSeparated'] as $separated) {
                 $code = 'bluepayment_'.$separated['gateway_id'];
 
