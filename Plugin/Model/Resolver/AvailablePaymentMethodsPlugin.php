@@ -28,13 +28,15 @@ class AvailablePaymentMethodsPlugin
      */
     public function afterResolve(AvailablePaymentMethods $subject, array $list)
     {
-        foreach ($this->configProvider->getPaymentConfig()['bluePaymentSeparated'] as $separated) {
-            $code = 'bluepayment_' . $separated['gateway_id'];
+        if ($this->configProvider->getPaymentConfig()['bluePaymentSeparated']) {
+            foreach ($this->configProvider->getPaymentConfig()['bluePaymentSeparated'] as $separated) {
+                $code = 'bluepayment_'.$separated['gateway_id'];
 
-            $list[$code] = [
-                'title' => $separated['name'],
-                'code' => $code
-            ];
+                $list[$code] = [
+                    'title' => $separated['name'],
+                    'code' => $code
+                ];
+            }
         }
 
         return $list;
