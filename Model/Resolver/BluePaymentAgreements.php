@@ -29,6 +29,12 @@ class BluePaymentAgreements implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        if ($args['currency'] != 'PLN') {
+            // Curren
+
+            return [];
+        }
+
         $result = $this->webapi->agreements($args['gateway_id'], $args['currency'], $args['locale']);
         if (!$result || !is_array($result) || !isset($result['regulationList'])) {
             return [];
