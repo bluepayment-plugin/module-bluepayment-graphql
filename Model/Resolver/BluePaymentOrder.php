@@ -9,15 +9,21 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthenticationException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Sales\Api\Data\OrderAddressInterface;
-use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order;
+use Magento\SalesGraphQl\Model\Order\OrderAddress;
+use Magento\SalesGraphQl\Model\Order\OrderPayments;
 use Magento\Store\Model\ScopeInterface;
 
 class BluePaymentOrder implements ResolverInterface
 {
     /** @var Order */
     protected $order;
+
+    /** @var OrderAddress */
+    protected $orderAddress;
+
+    /** @var OrderPayments */
+    protected $orderPayments;
 
     /** @var ScopeConfigInterface */
     protected $scopeConfig;
@@ -27,10 +33,14 @@ class BluePaymentOrder implements ResolverInterface
 
     public function __construct(
         Order $order,
+        OrderAddress $orderAddress,
+        OrderPayments $orderPayments,
         ScopeConfigInterface $scopeConfig,
         Data $helper
     ) {
         $this->order = $order;
+        $this->orderAddress = $orderAddress;
+        $this->orderPayments = $orderPayments;
         $this->scopeConfig = $scopeConfig;
         $this->helper = $helper;
     }
@@ -55,17 +65,14 @@ class BluePaymentOrder implements ResolverInterface
         $payment = $order->getPayment();
 
         $currency = $order->getOrderCurrencyCode();
-        $websiteCode = $order->getStore()->getWebsite()->getCode();
 
         $serviceId = $this->scopeConfig->getValue(
             'payment/bluepayment/' . strtolower($currency) . '/service_id',
-            ScopeInterface::SCOPE_WEBSITE,
-            $websiteCode
+            ScopeInterface::SCOPE_STORE
         );
         $sharedKey = $this->scopeConfig->getValue(
             'payment/bluepayment/' . strtolower($currency) . '/shared_key',
-            ScopeInterface::SCOPE_WEBSITE,
-            $websiteCode
+            ScopeInterface::SCOPE_STORE
         );
 
         $hashData = [$serviceId, $order->getIncrementId(), $sharedKey];
@@ -85,84 +92,11 @@ class BluePaymentOrder implements ResolverInterface
             'status' => $order->getStatusLabel(),
             'invoices' => $order->getInvoiceCollection(),
             'shipping_method' => $order->getShippingDescription(),
-            'shipping_address' => $this->getOrderShippingAddress($order),
-            'billing_address' => $this->getOrderBillingAddress($order),
-            'payment_methods' => $this->getOrderPaymentMethod($order),
+            'shipping_address' => $this->orderAddress->getOrderShippingAddress($order),
+            'billing_address' => $this->orderAddress->getOrderBillingAddress($order),
+            'payment_methods' => $this->orderPayments->getOrderPaymentMethod($order),
             'model' => $order,
-            'bluepayment_state' => $payment->getAdditionalInformation('bluepayment_state'),
+            'bluepayment_state' => $payment->getAdditionalInformation('bluepayment_state')
         ];
-    }
-
-    /**
-     * Get the order Shipping address
-     *
-     * @param OrderInterface $order
-     *
-     * @return array|null
-     */
-    public function getOrderShippingAddress(OrderInterface $order) {
-        $shippingAddress = null;
-        if ($order->getShippingAddress()) {
-            $shippingAddress = $this->formatAddressData($order->getShippingAddress());
-        }
-        return $shippingAddress;
-    }
-
-    /**
-     * Get the order billing address
-     *
-     * @param OrderInterface $order
-     *
-     * @return array|null
-     */
-    public function getOrderBillingAddress(OrderInterface $order) {
-        $billingAddress = null;
-        if ($order->getBillingAddress()) {
-            $billingAddress = $this->formatAddressData($order->getBillingAddress());
-        }
-        return $billingAddress;
-    }
-
-    /**
-     * Customer Order address data formatter
-     *
-     * @param OrderAddressInterface $orderAddress
-     * @return array
-     */
-    private function formatAddressData(OrderAddressInterface $orderAddress) {
-        return
-            [
-                'firstname' => $orderAddress->getFirstname(),
-                'lastname' => $orderAddress->getLastname(),
-                'middlename' => $orderAddress->getMiddlename(),
-                'postcode' => $orderAddress->getPostcode(),
-                'prefix' => $orderAddress->getPrefix(),
-                'suffix' => $orderAddress->getSuffix(),
-                'street' => $orderAddress->getStreet(),
-                'country_code' => $orderAddress->getCountryId(),
-                'city' => $orderAddress->getCity(),
-                'company' => $orderAddress->getCompany(),
-                'fax' => $orderAddress->getFax(),
-                'telephone' => $orderAddress->getTelephone(),
-                'vat_id' => $orderAddress->getVatId(),
-                'region_id' => $orderAddress->getRegionId(),
-                'region' => $orderAddress->getRegion(),
-            ];
-    }
-
-    /**
-     * Get the order payment method
-     *
-     * @param OrderInterface $orderModel
-     * @return array
-     */
-    public function getOrderPaymentMethod(OrderInterface $orderModel)
-    {
-        $orderPayment = $orderModel->getPayment();
-        return [[
-            'name' => $orderPayment->getAdditionalInformation()['method_title'] ?? '',
-            'type' => $orderPayment->getMethod(),
-            'additional_data' => []
-        ]];
     }
 }

@@ -7,6 +7,17 @@ type Query {
         order_number: String!,
         hash: String!
     ): BluePaymentOrder! @resolver(class: "BlueMedia\\BluePaymentGraphQl\\Model\\Resolver\\BluePaymentOrder")
+
+    bluepaymentGateways (
+        value: Float!,
+        currency: CurrencyEnum!
+    ): [BluePaymentGateway]! @resolver(class: "BlueMedia\\BluePaymentGraphQl\\Model\\Resolver\\BluePaymentGateways")
+
+    bluepaymentAgreements (
+        gateway_id: Int!,
+        currency: CurrencyEnum!,
+        locale: String!
+    ): [BluePaymentAgreement]! @resolver(class: "BlueMedia\\BluePaymentGraphQl\\Model\\Resolver\\BluePaymentAgreements")
 }
 
 input PaymentMethodInput {
@@ -15,7 +26,9 @@ input PaymentMethodInput {
 
 input BluepaymentInput {
     create_payment: Boolean!,
-    back_url: String!
+    back_url: String!,
+    gateway_id: Int,
+    agreements_ids: String
 }
 
 type BluePaymentOrder {
@@ -36,4 +49,29 @@ type BluePaymentOrder {
     comments: [SalesCommentItem] @doc(description: "Comments about the order")
 
     bluepayment_state: String
+}
+
+type BluePaymentGateway {
+    gateway_id: ID!
+    name: String!
+    description: String
+    sort_order: Int
+    type: String
+    logo_url: String!
+    is_separated_method: Boolean!
+}
+
+type BluePaymentAgreement {
+    regulation_id: ID!
+    type: String!
+    url: String
+    label_list: [BluePaymentAgreementLabel]
+}
+
+type BluePaymentAgreementLabel {
+    label_id: ID!
+    label: String
+    placement: String!
+    show_checkbox: Boolean!
+    checkbox_required: Boolean!
 }
