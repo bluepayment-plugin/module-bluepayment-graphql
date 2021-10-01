@@ -5,13 +5,16 @@ Moduł rozszerzający podstawową wersję BlueMedia_BluePayment o API GraphQL.
 ## Instalacja
 
 ### Poprzez composera
-@ToDo
+1. Wykonaj polecenie
+```shell
+composer require bluepayment-plugin/module-bluepayment-graphql
+```
 
 ### Poprzez paczkę .zip
 1. Pobrać najnowszą wersję modułu z repozytorium.
 2. Wgrać plik .zip do katalogu głównego Magento.
 3. Będąc w katalogu głównym Magento, wykonać komendę:
-```bash
+```shell
 unzip -o -d app/code/BlueMedia/BluePaymentGraphQl bm-bluepayment-graph-ql-*.zip && rm bm-bluepayment-graph-ql-*.zip
 ```
 4. Przejść do aktywacji modułu.
