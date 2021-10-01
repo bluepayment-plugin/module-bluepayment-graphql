@@ -36,14 +36,60 @@ unzip -o -d app/code/BlueMedia/BluePaymentGraphQl bm-bluepayment-graph-ql-*.zip 
 
 ### Pobranie dostępnych kanałów płatności
 
-Wywołaj query `bluepaymentGateways`, przykład:
+Wszystkie kanały, które są oznaczone jako *Oddzielna metoda płatności*,
+są dostępne w obiekcie koszyka w parametrze `available_payment_methods`, przykład:
+```graphql
+query ($cartId: String!) {
+  cart(cart_id: $cartId) {
+    id
+    available_payment_methods {
+      code
+      title
+    }
+  }
+}
+```
+Zwraca odpowiedź
+```graphql
+{
+  "data": {
+    "cart": {
+      "id": "nt3XNmQLhBl2rNbhfL8g8WuBuYEXwiCe",
+      "available_payment_methods": [
+        {
+          "code": "bluepayment",
+          "title": "Płatność Blue Media"
+        },
+        {
+          "code": "bluepayment_509",
+          "title": "BLIK"
+        },
+        {
+          "code": "bluepayment_1503",
+          "title": "PBC płatność automatyczna"
+        },
+        {
+          "code": "bluepayment_1512",
+          "title": "Google Pay"
+        },
+        {
+          "code": "bluepayment_1513",
+          "title": "Apple Pay"
+        }
+      ]
+    }
+  }
+}
+```
+
+
+Aby pobrać wszystkie pozostałe kanały płatności, które są rozwijane po wybraniu głównej metody BlueMedia, wywołaj query `bluepaymentGateways`, przykład:
 ```graphql
 query getBluePaymentGateways($value: Float!, $currency: CurrencyEnum!) {
   bluepaymentGateways(value: $value, currency: $currency) {
     gateway_id
     name
     logo_url
-    is_separated_method
   }
 }
 ```
