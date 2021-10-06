@@ -49,7 +49,7 @@ class SelectedPaymentMethodPlugin
             return [];
         }
 
-        if (get_class($payment->getMethodInstance()) === Payment::class && $payment->hasAdditionalInformation('gateway_id')) {
+        if ($payment->hasAdditionalInformation('gateway_id') && get_class($payment->getMethodInstance()) === Payment::class) {
             $gateway_id = $payment->getAdditionalInformation('gateway_id');
             $gateways = $this->configProvider->getActiveGateways($cart->getGrandTotal(), $cart->getQuoteCurrencyCode());
             foreach ($gateways as $gateway) {

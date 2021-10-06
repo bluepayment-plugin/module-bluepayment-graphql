@@ -1,3 +1,6 @@
+### 1.2.2
+- Poprawiliśmy błąd występujący przy query `cart(cart_id: '...') { selected_payment_method { ... } }`
+
 ### 1.2.0
 - Obsługa zgód formalnych
 
