@@ -75,3 +75,7 @@ type BluePaymentAgreementLabel {
     show_checkbox: Boolean!
     checkbox_required: Boolean!
 }
+
+type AvailablePaymentMethod {
+    gateway_id: ID
+}

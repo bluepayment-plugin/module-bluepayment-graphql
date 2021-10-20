@@ -34,6 +34,7 @@ class AvailablePaymentMethodsPlugin
 
                 $list[$code] = [
                     'title' => $separated['name'],
+                    'gateway_id' => $separated['gateway_id'],
                     'code' => $code
                 ];
             }

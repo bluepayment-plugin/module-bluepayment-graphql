@@ -13,4 +13,11 @@
                 name="bluepaymentGraphQlSelectedPaymentMethod"
                 type="BlueMedia\BluePaymentGraphQl\Plugin\Model\Resolver\SelectedPaymentMethodPlugin"/>
     </type>
+
+    <type name="Magento\QuoteGraphQl\Model\Resolver\SetPaymentMethodOnCart">
+        <plugin
+            sortOrder="10"
+            name="bluepaymentGraphQlSetPaymentMethodOnCart"
+            type="BlueMedia\BluePaymentGraphQl\Plugin\Model\Resolver\SetPaymentMethodOnCartPlugin"/>
+    </type>
 </config>
