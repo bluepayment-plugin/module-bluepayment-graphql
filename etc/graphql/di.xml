@@ -13,4 +13,8 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Payment\Helper\Data">
+        <plugin sortOrder="10" name="bluepayment_payment_data_graphql" type="BlueMedia\BluePayment\Plugin\ExtendPaymentMethod"/>
+    </type>
 </config>

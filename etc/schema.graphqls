@@ -14,7 +14,7 @@ type Query {
     ): [BluePaymentGateway]! @resolver(class: "BlueMedia\\BluePaymentGraphQl\\Model\\Resolver\\BluePaymentGateways")
 
     bluepaymentAgreements (
-        gateway_id: Int!,
+        gateway_id: String!,
         currency: CurrencyEnum!,
         locale: String!
     ): [BluePaymentAgreement]! @resolver(class: "BlueMedia\\BluePaymentGraphQl\\Model\\Resolver\\BluePaymentAgreements")
@@ -27,7 +27,7 @@ input PaymentMethodInput {
 input BluepaymentInput {
     create_payment: Boolean!,
     back_url: String!,
-    gateway_id: Int,
+    gateway_id: String,
     agreements_ids: String
 }
 
