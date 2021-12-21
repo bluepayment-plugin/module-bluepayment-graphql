@@ -32,7 +32,7 @@ unzip -o -d app/code/BlueMedia/BluePaymentGraphQl bm-bluepayment-graph-ql-*.zip 
 
 | BlueMedia_BluePayment | BlueMedia_BluePaymentGraphQl | bluemedia/bluepayment-pwa (JS) | Magento        | Magento PWA |
 |-----------------------|------------------------------|--------------------------------|----------------|-------------|
-| 2.17.1                | 1.2.4                        | 0.0.8                          | 2.4.2 - 2.4.3  | 10.x        |
+| 2.17.1                | 1.2.4-1.2.5                  | 0.0.8                          | 2.4.2 - 2.4.3  | 10.x        |
 | 2.16.0                | 1.2.2                        | 0.0.4                          | 2.4.2 - 2.4.3  | 10.x        |
 | 2.15.0                | 1.1.0                        | 0.0.3                          | 2.4.2          | 10.x        |
 

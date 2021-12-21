@@ -1,5 +1,12 @@
 <?xml version="1.0"?>
 <config>
+    <type name="Magento\QuoteGraphQl\Model\Resolver\AvailablePaymentMethods">
+        <plugin
+            sortOrder="10"
+            name="bluepaymentGraphQlAvailablePaymentMethods"
+            type="BlueMedia\BluePaymentGraphQl\Plugin\Model\Resolver\AvailablePaymentMethodsPlugin"/>
+    </type>
+
     <type name="Magento\QuoteGraphQl\Model\Resolver\SelectedPaymentMethod">
         <plugin
                 sortOrder="10"
@@ -12,5 +19,12 @@
             sortOrder="10"
             name="bluepaymentGraphQlSetPaymentMethodOnCart"
             type="BlueMedia\BluePaymentGraphQl\Plugin\Model\Resolver\SetPaymentMethodOnCartPlugin"/>
+    </type>
+
+    <type name="Magento\SalesGraphQl\Model\Order\OrderPayments">
+        <plugin
+            sortOrder="10"
+            name="bluepaymentGraphQlOrderPaymentsUpdateTitle"
+            type="BlueMedia\BluePaymentGraphQl\Plugin\Model\Order\SetTitleToBluepaymentMethod" />
     </type>
 </config>

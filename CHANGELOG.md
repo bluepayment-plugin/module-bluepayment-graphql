@@ -1,3 +1,7 @@
+### 1.2.5
+- Dodaliśmy nazwę wybranego kanału płatności dla query `customer { orders (...) { items { payment_methods { name } } } } }`
+- Poprawiliśmy problem z brakiem `gateway_id` w query `cart { available_payment_methods { ... } }`
+
 ### 1.2.4
 - Dodaliśmy walidację parametrów dla mutacji `setPaymentMethodOnCart`
 - Zmieniliśmy typ `gateway_id` na string
