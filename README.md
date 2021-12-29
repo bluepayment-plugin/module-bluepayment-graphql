@@ -1,4 +1,4 @@
-# Tabela kompatybilności
+## Tabela kompatybilności
 
 | BlueMedia_BluePayment | BlueMedia_BluePaymentGraphQL | bluemedia/bluepayment-pwa (JS) | Magento | Magento PWA |
 | --- | --- | --- | --- |--- |
@@ -6,14 +6,14 @@
 | 2.16.0 | 1.2.2 | 0.0.4 | 2.4.2 - 2.4.3 | 10.x |
 | 2.15.0 | 1.1.0 | 0.0.3 | 2.4.2 | 10.x |
 
-# Instalacja modułu
+## Instalacja modułu
 
 Wykonaj polecenie poprzez composer: 
 ```bash
 composer require bluepayment-plugin/module-bluepayment-graphql
 ```
 
-# Aktywacja
+## Aktywacja
 
 1. Wejdź do katalgu głównego Magento i wykonaj następujące polecenia:
 ```bash
@@ -26,7 +26,7 @@ bin/magento cache:flush
 2. Gotowe. Moduł jest już aktywny.
 
 
-# Szczegóły techniczne
+## Szczegóły techniczne
 
 1. **Czy w dostępnych kanałach płatności w query bluepaymentGateways() są od razu BLIK, płatność kartą i lista banków do szybkich przelewów? Jeśli w standardzie jest zwracanie listy banków, to czy można dostać sam "szybki przelew/PBL" z opcją wyboru konkretnego banku już w WebView?**
 
