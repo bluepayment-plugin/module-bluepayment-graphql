@@ -3,18 +3,24 @@ declare(strict_types=1);
 
 namespace BlueMedia\BluePaymentGraphQl\Model\Resolver;
 
-use BlueMedia\BluePayment\Model\ConfigProvider;
+use BlueMedia\BluePayment\Model\ConfigProvider as BluePaymentConfigProvider;
 use BlueMedia\BluePayment\Model\Gateway;
+use BlueMedia\BluePaymentGraphQl\Model\ConfigProvider;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 class BluePaymentGateways implements ResolverInterface
 {
-    /** @var ConfigProvider */
+    /** @var BluePaymentConfigProvider */
     protected $configProvider;
 
-    public function __construct(ConfigProvider $configProvider)
+    /**
+     * Constructor
+     *
+     * @param BluePaymentConfigProvider $configProvider
+     */
+    public function __construct(BluePaymentConfigProvider $configProvider)
     {
         $this->configProvider = $configProvider;
     }
@@ -32,7 +38,7 @@ class BluePaymentGateways implements ResolverInterface
         $gateways = [];
 
         if ($this->configProvider->isGatewaySelectionEnabled()) {
-            foreach ($this->configProvider->getActiveGateways($args['value'], $args['currency']) as $gateway) {
+            foreach ($this->configProvider->getActiveGateways($args['currency'], $args['value']) as $gateway) {
                 if ($this->available($gateway)) {
                     $gateways[] = $this->prepareGateway($gateway);
                 }
@@ -44,13 +50,21 @@ class BluePaymentGateways implements ResolverInterface
         return $gateways;
     }
 
-    protected function available(Gateway $gateway)
+    /**
+     * Returns wheter gateway is available.
+     *
+     * @param Gateway $gateway
+     * @return bool
+     */
+    protected function available(Gateway $gateway): bool
     {
-        return $gateway->getGatewayId() != ConfigProvider::AUTOPAY_GATEWAY_ID
+        return !in_array((int) $gateway->getGatewayId(), ConfigProvider::UNAVAILABLE_GATEWAYS, true)
             && !$gateway->isSeparatedMethod();
     }
 
     /**
+     * Prepare gateway array structure.
+     *
      * @param Gateway $gateway
      * @return array
      */

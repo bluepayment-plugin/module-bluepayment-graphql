@@ -1,10 +1,11 @@
 ## Tabela kompatybilności
 
-| BlueMedia_BluePayment | BlueMedia_BluePaymentGraphQL | bluemedia/bluepayment-pwa (JS) | Magento | Magento PWA |
-| --- | --- | --- | --- |--- |
-| 2.17.1 | 1.2.4-1.2.5 | 0.0.8 | 2.4.2 - 2.4.3 | 10.x |
-| 2.16.0 | 1.2.2 | 0.0.4 | 2.4.2 - 2.4.3 | 10.x |
-| 2.15.0 | 1.1.0 | 0.0.3 | 2.4.2 | 10.x |
+| BlueMedia_BluePayment | BlueMedia_BluePaymentGraphQl | bluemedia/bluepayment-pwa (JS) | Magento       | Magento PWA |
+|-----------------------|------------------------------|--------------------------------|---------------|-------------|
+| 2.21.2                | 1.2.6                        | 0.0.8                          | 2.4.2 - 2.4.5 | 10.x        |
+| 2.17.1                | 1.2.4-1.2.5                  | 0.0.8                          | 2.4.2 - 2.4.3 | 10.x        |
+| 2.16.0                | 1.2.2                        | 0.0.4                          | 2.4.2 - 2.4.3 | 10.x        |
+| 2.15.0                | 1.1.0                        | 0.0.3                          | 2.4.2         | 10.x        |
 
 ## Instalacja modułu
 
@@ -153,6 +154,26 @@ fragment AvailablePaymentMethodsFragment on Cart {
   __typename
 }
 ```
+Gdzie `$value` jest kwotą brutto koszyka (cart.prices.grand_total.value), a `$currency` jest aktualną walutą koszyka (cart.prices.grand_total.currency).
+W odpowiedzi otrzymasz tablice obiektów:
+```graphql
+gateway_id: ID!
+name: String!
+description: String
+sort_order: Int
+type: String
+logo_url: String!
+is_separated_method: Boolean!
+```
+| Klucz               | Opis                                                                                                                       |
+|---------------------|----------------------------------------------------------------------------------------------------------------------------|
+| gateway_id          | ID kanału płatności                                                                                                        |
+| name                | Nazwa kanału, zgodnie z ustawieniem w panelu administracyjnym Magento                                                      |
+| description         | Opis kanału (zarządzalny z poziomu panelu adminstracyjnego Magneto)                                                        |
+| sort_order          | Kolejność sortowania (zarządzalna z poziomu panelu adminstracyjnego Magneto)                                               |
+| type                | Typ kanału płatności (aktuaalnie dostępne opcje: PBL, Szybki Przelew, Raty online, Portfel elektroniczny, BLIK)            |
+| logo_url            | Adres URL do logotypu kanału. Możliwy do nadpisania w panelu administracyjnym Magento                                      |
+| is_separated_method | Czy kanał powinien być wyświetlany jako osobna metoda płatności (zgodnie z ustawieniem w panelu administracyjnym Magneto). |
 
 <br>
 
@@ -161,10 +182,43 @@ fragment AvailablePaymentMethodsFragment on Cart {
 Dla mutacji **setPaymentMethodOnCart** została dodana obsługa kodów w formacie **bluepayment_509**. Jeśli w taki sposób zostanie wysłany kod metody płatności – backendowo zostanie on „przepisany” na odpowiednio bluepayment z kanałem 509.
 
 Przykład:
-    
- ```   
-mutation setPaymentMethodOnCart($cartId: String!, $backUrl: String!, $agreementsIds: String) {
-  setPaymentMethodOnCart(input: {
+```graphql
+query getBluePaymentAgreements($gatewayId: ID!, $currency: CurrencyEnum!, $locale: String!) {
+  bluepaymentAgreements(gateway_id: $gatewayId, currency: $currency, locale: $locale) {
+    regulation_id
+    type
+    url
+    label_list {
+      label_id
+      label
+      placement
+      show_checkbox
+      checkbox_required
+    }
+  }
+}
+```
+Jako `$locale` podajemy język użytkownika w formacie BCP-47, ale podkreśleniem zamiast myślnika (np. pl_PL, en_US).
+W odpowiedzi dostajemy listę zgód dla danego kanału płatności.
+
+| Klucz             | Opis                                                                                                                                                                                                                                                                                                          |
+|-------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| label_id          | Identyfikator klauzuli, przekazywane na potrzeby diagnostyczne (może być przez Partnera ignorowany).                                                                                                                                                                                                          |
+| label             | Treść klauzuli do wyświetlenia w Serwisie w powiązaniu z odpowiednim regulationID. W niektórych przypadkach może zawierać link do regulaminu.                                                                                                                                                                 |
+| placement         | Informacja, stanowiąca sugestię, gdzie umieścić klauzule. Aktualne wartości:<br>- TOP_OF_PAGE – na górze Serwisu (np. w okolicach logo/bannera górnego).<br>- NEAR_PAYWALL – w okolicach listy kanałów płatności (bezpośrednio nad, pod lub obok).<br>- ABOVE_BUTTON – nad przyciskiem „Rozpocznij płatność”. |
+| show_checkbox     | Informacja, czy klauzula powinna być wyświetlana obok checkboxa do akceptacji użytkownika.                                                                                                                                                                                                                    |
+| checkbox_required | Informacja, czy wyświetlany Checkbox musi być zaakceptowany przez użytkownika, aby móc kontynuować płatność.  UWAGA: W przypadku wartości true, należy zablokować przycisk „Rozpocznij płatność”, do czasu zaznaczenia checkboxa.                                                                             |
+
+Zgody po stronie Magento są cachowane na 15 minut (dla konkretnego kanału płatności, waluty i języka).
+ 
+### Rozpoczęcie płatności
+
+Wywołaj mutację `setPymentMethodOnCart`, podając kod metody płatności na `bluepayment` rozszerzoną o   
+Przykład:
+```graphql
+mutation setPaymentMethodOnCart($cartId: String!, $backUrl: String!, $gatewayId: ID, $agreementsIds: String) {
+  setPaymentMethodOnCart(
+    input: {
       cart_id: $cartId
       payment_method: {
           code: "bluepayment_1899"
@@ -184,3 +238,25 @@ mutation setPaymentMethodOnCart($cartId: String!, $backUrl: String!, $agreements
   }
 } 
 ```
+| Klucz          | Opis                                                                                                                                                                                                                                                                                                          |
+|----------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| cart_id        | Identyfikator koszyka                                                                                                                                                                                                                                                                                         |
+| create_payment | Czy utworzyć transakcję płatniczą w BlueMedia                                                                                                                                                                                                                                                                 |
+| back_url       | Informacja, stanowiąca sugestię, gdzie umieścić klauzule. Aktualne wartości:<br>- TOP_OF_PAGE – na górze Serwisu (np. w okolicach logo/bannera górnego).<br>- NEAR_PAYWALL – w okolicach listy kanałów płatności (bezpośrednio nad, pod lub obok).<br>- ABOVE_BUTTON – nad przyciskiem „Rozpocznij płatność”. |
+| gateway_id     | Opcjonalnie - ID kanału płatności                                                                                                                                                                                                                                                                             |
+| agreements_ids | Opcjonalne - lista zaakceptowanych (show_checkbox=true) lub wyświetlonych (show_checkbox=false) klauzul, rozdzielone przecinkami (np. `1,10,20`)                                                                                                                                                              |
+
+Jeśli `create_payment` zostało ustawione na `True`, po złożeniu zamówienia, zostanie rozpoczęta transakcja w BlueMedia.
+Następnie pobierz `redirectUrl` dla danego zamówienia i przekieruj użytkownika na podany adres.
+
+## Pobranie redirectUrl
+
+Wywołaj query `redirectUrl`, przykła:
+```graphql
+query getRedirectUrl($orderNumber: String!) {
+  redirectUrl(order_number: $orderNumber)
+}
+```
+
+W odpowiedzi otrzymasz `redirectUrl` z adresem na jaki należy przekierować użytkownika.
+Po zakończeniu płatności, użytkownik zostanie przekierowany na adres podany w parametrze `back_url`

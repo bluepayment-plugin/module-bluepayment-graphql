@@ -58,7 +58,6 @@ class BluePaymentOrder implements ResolverInterface
         $orderNumber = $args['order_number'];
         $hash = $args['hash'];
 
-        /** @var Order $order */
         $order = $this->order->loadByIncrementId($orderNumber);
 
         /** @var Order\Payment $payment */

@@ -1,10 +1,4 @@
 <?xml version="1.0"?>
-<!--
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
--->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderPool">
         <arguments>
@@ -16,5 +10,23 @@
 
     <type name="Magento\Payment\Helper\Data">
         <plugin sortOrder="10" name="bluepayment_payment_data_graphql" type="BlueMedia\BluePayment\Plugin\ExtendPaymentMethod"/>
+    </type>
+
+    <type name="Magento\Payment\Model\Checks\SpecificationFactory">
+        <arguments>
+            <argument name="mapping" xsi:type="array">
+                <item name="country" xsi:type="object">Magento\Payment\Model\Checks\CanUseForCountry</item>
+                <item name="currency" xsi:type="object">Magento\Payment\Model\Checks\CanUseForCurrency</item>
+                <item name="checkout" xsi:type="object">Magento\Payment\Model\Checks\CanUseCheckout</item>
+                <item name="internal" xsi:type="object">Magento\Payment\Model\Checks\CanUseInternal</item>
+                <item name="total" xsi:type="object">Magento\Payment\Model\Checks\TotalMinMax</item>
+                <item name="zero_total" xsi:type="object">Magento\Payment\Model\Checks\ZeroTotal</item>
+                <item name="bm_amount" xsi:type="object">BlueMedia\BluePaymentGraphQl\Model\Checks\Amount</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Payment\Model\Checks\SpecificationFactory">
+        <plugin name="add_amount_check" type="BlueMedia\BluePaymentGraphQl\Plugin\AddAmountCheckPlugin"/>
     </type>
 </config>

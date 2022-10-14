@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace BlueMedia\BluePaymentGraphQl\Model\Resolver;
@@ -29,9 +28,8 @@ class BluePaymentAgreements implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if ($args['currency'] != 'PLN') {
-            // Curren
-
+        if ($args['currency'] !== 'PLN') {
+            // Currency other than PLN are not supported.
             return [];
         }
 
@@ -45,8 +43,9 @@ class BluePaymentAgreements implements ResolverInterface
     }
 
     /**
-     * @param  array  $agreement
+     * Prepare agreement structure.
      *
+     * @param array $agreement
      * @return array
      */
     protected function prepareAgreement(array $agreement): array
@@ -62,8 +61,9 @@ class BluePaymentAgreements implements ResolverInterface
     }
 
     /**
-     * @param  array
+     * Prepare label structure.
      *
+     * @param array $label
      * @return array
      */
     protected function prepareLabel(array $label): array
