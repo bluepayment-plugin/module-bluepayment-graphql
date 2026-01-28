@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace BlueMedia\BluePaymentGraphQl\Plugin\Model\Resolver;
 
@@ -6,7 +7,6 @@ use BlueMedia\BluePayment\Model\ConfigProvider;
 use BlueMedia\BluePayment\Model\Gateway;
 use BlueMedia\BluePayment\Model\Payment;
 use Closure;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Model\Quote;
@@ -17,10 +17,9 @@ class SelectedPaymentMethodPlugin
     /**
      * @var ConfigProvider
      */
-    private $configProvider;
+    private ConfigProvider $configProvider;
 
     /**
-     * AvailablePaymentMethodsPlugin constructor.
      * @param ConfigProvider $configProvider
      */
     public function __construct(ConfigProvider $configProvider)
@@ -28,19 +27,27 @@ class SelectedPaymentMethodPlugin
         $this->configProvider = $configProvider;
     }
 
-
     /**
+     * Return gateway name as payment method title for bluepayment.
+     *
      * @param SelectedPaymentMethod $subject
      * @param Closure $proceed
      * @param Field $field
-     * @param $context
+     * @param mixed $context
      * @param ResolveInfo $info
      * @param array|null $value
      * @param array|null $args
      * @return array
      */
-    public function aroundResolve(SelectedPaymentMethod $subject, Closure $proceed, Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
-    {
+    public function aroundResolve(
+        SelectedPaymentMethod $subject,
+        Closure $proceed,
+        Field $field,
+        $context,
+        ResolveInfo $info,
+        ?array $value = null,
+        ?array $args = null
+    ): array {
         /** @var Quote $cart */
         $cart = $value['model'];
 
@@ -50,15 +57,18 @@ class SelectedPaymentMethodPlugin
         }
 
         if ($payment->hasAdditionalInformation('gateway_id') && $payment->getMethodInstance() instanceof Payment) {
-            $gateway_id = $payment->getAdditionalInformation('gateway_id');
-            $gateways = $this->configProvider->getActiveGateways($cart->getQuoteCurrencyCode(), $cart->getGrandTotal());
+            $gatewayId = (int) $payment->getAdditionalInformation('gateway_id');
+            $gateways = $this->configProvider->getActiveGateways(
+                $cart->getQuoteCurrencyCode(),
+                (float) $cart->getGrandTotal()
+            );
+
             foreach ($gateways as $gateway) {
                 /** @var Gateway $gateway */
-
-                if ($gateway->getGatewayId() == $gateway_id) {
+                if ($gateway->getGatewayId() === $gatewayId) {
                     return [
                         'code' => $payment->getMethod() ?? '',
-                        'title' => $gateway->getGatewayName(),
+                        'title' => $gateway->getName(),
                         'purchase_order_number' => $payment->getPoNumber(),
                     ];
                 }

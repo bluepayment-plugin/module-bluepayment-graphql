@@ -16,21 +16,38 @@ use Magento\Store\Model\ScopeInterface;
 
 class BluePaymentOrder implements ResolverInterface
 {
-    /** @var Order */
-    protected $order;
+    /**
+     * @var Order
+     */
+    protected Order $order;
 
-    /** @var OrderAddress */
-    protected $orderAddress;
+    /**
+     * @var OrderAddress
+     */
+    protected OrderAddress $orderAddress;
 
-    /** @var OrderPayments */
-    protected $orderPayments;
+    /**
+     * @var OrderPayments
+     */
+    protected OrderPayments $orderPayments;
 
-    /** @var ScopeConfigInterface */
-    protected $scopeConfig;
+    /**
+     * @var ScopeConfigInterface
+     */
+    protected ScopeConfigInterface $scopeConfig;
 
-    /** @var Data */
-    protected $helper;
+    /**
+     * @var Data
+     */
+    protected Data $helper;
 
+    /**
+     * @param Order $order
+     * @param OrderAddress $orderAddress
+     * @param OrderPayments $orderPayments
+     * @param ScopeConfigInterface $scopeConfig
+     * @param Data $helper
+     */
     public function __construct(
         Order $order,
         OrderAddress $orderAddress,
@@ -52,8 +69,8 @@ class BluePaymentOrder implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ? array $value = null,
+        ? array $args = null
     ) {
         $orderNumber = $args['order_number'];
         $hash = $args['hash'];

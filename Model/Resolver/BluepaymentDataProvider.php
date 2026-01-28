@@ -7,14 +7,14 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderInterface;
 
 /**
- * Format Braintree input into value expected when setting payment method
+ * Format Bluepayment input into value expected when setting payment method.
  */
 class BluepaymentDataProvider implements AdditionalDataProviderInterface
 {
     private const PATH_ADDITIONAL_DATA = 'bluepayment';
 
     /**
-     * Format Braintree input into value expected when setting payment method
+     * Get additional data for Bluepayment payment method.
      *
      * @param array $args
      * @return array

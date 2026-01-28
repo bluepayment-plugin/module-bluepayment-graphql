@@ -12,12 +12,12 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 class BluePaymentGateways implements ResolverInterface
 {
-    /** @var BluePaymentConfigProvider */
-    protected $configProvider;
+    /**
+     * @var BluePaymentConfigProvider
+     */
+    protected BluePaymentConfigProvider $configProvider;
 
     /**
-     * Constructor
-     *
      * @param BluePaymentConfigProvider $configProvider
      */
     public function __construct(BluePaymentConfigProvider $configProvider)
@@ -32,8 +32,8 @@ class BluePaymentGateways implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         $gateways = [];
 
@@ -73,12 +73,15 @@ class BluePaymentGateways implements ResolverInterface
         return [
             'gateway_id' => $gateway->getGatewayId(),
             'name' => $gateway->getName(),
-            'bank' => $gateway->getBankName(),
+            'bank_name' => $gateway->getBankName(),
+            'short_description' => $gateway->getShortDescription(),
             'description' => $gateway->getDescription(),
             'sort_order' => $gateway->getSortOrder(),
             'type' => $gateway->getType(),
-            'logo_url' => $gateway->getUseOwnLogo() ? $gateway->getLogoPath() : $gateway->getLogoUrl(),
-            'is_separated_method' => $gateway->isSeparatedMethod()
+            'logo_url' => $gateway->shouldUseOwnLogo() ? $gateway->getLogoPath() : $gateway->getLogoUrl(),
+            'is_separated_method' => $gateway->isSeparatedMethod(),
+            'min_amount' => $gateway->getMinAmount(),
+            'max_amount' => $gateway->getMaxAmount(),
         ];
     }
 }

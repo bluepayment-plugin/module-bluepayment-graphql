@@ -23,11 +23,11 @@ class Amount implements SpecificationInterface
     {
         $code = $paymentMethod->getCode();
 
-        if (false === strpos($code, Payment::SEPARATED_PREFIX_CODE)) {
+        if (!str_contains($code, Payment::SEPARATED_PREFIX_CODE)) {
             return true;
         }
 
-        if (! $paymentMethod->getGatewayModel()) {
+        if (!$paymentMethod->getGatewayModel()) {
             return true;
         }
 
@@ -38,17 +38,15 @@ class Amount implements SpecificationInterface
             return false;
         }
 
-        // For null - we don't need to check amounts.
-        $minAmount = $paymentMethod->getGatewayModel()->getMinAmount() ?? false;
-        $maxAmount = $paymentMethod->getGatewayModel()->getMaxAmount() ?? false;
-
         $total = (float) $quote->getGrandTotal();
+        $minAmount = $gateway->getMinAmount();
+        $maxAmount = $gateway->getMaxAmount();
 
-        if ($minAmount && $total < (float) $minAmount) {
+        if ($minAmount !== null && $total < $minAmount) {
             return false;
         }
 
-        if ($maxAmount && $total > (float) $maxAmount) {
+        if ($maxAmount !== null && $total > $maxAmount) {
             return false;
         }
 

@@ -54,11 +54,15 @@ type BluePaymentOrder {
 type BluePaymentGateway {
     gateway_id: ID!
     name: String!
+    bank_name: String
+    short_description: String
     description: String
     sort_order: Int
     type: String
     logo_url: String!
     is_separated_method: Boolean!
+    min_amount: Float
+    max_amount: Float
 }
 
 type BluePaymentAgreement {

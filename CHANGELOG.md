@@ -1,3 +1,15 @@
+### 1.3.0
+- Dostosowaliśmy moduł do wersji BlueMedia_BluePayment 2.30.0 oraz Magento 2.4.8.
+- Dodaliśmy pełną zgodność z PHP 8.2 i PHP 8.3.
+- Rozszerzyliśmy schemat GraphQL o nowe pola: `bank_name`, `short_description`, `min_amount`, `max_amount`.
+- Poprawiliśmy wywołanie metody `shouldUseOwnLogo()` (poprzednio `getUseOwnLogo()`).
+- Usunęliśmy HUB z listy niedostępnych bramek (działa przez redirect).
+- Zaktualizowaliśmy kod do standardów PHP 8.x (`str_contains`, `str_starts_with`, typed properties).
+- Poprawiliśmy dokumentację PHPDoc i usunęliśmy nieużywane importy.
+
+### 1.2.7
+- Poprawki kompatybilności z Magento 2.4.7.
+
 ### 1.2.6
 - Dostosowaliśmy moduł do wersji BlueMedia_BluePayment 2.21.2.
 - Dodaliśmy obsługę minimalnej i maksymalnej kwoty dla poszczególnych kanałów płatności.
