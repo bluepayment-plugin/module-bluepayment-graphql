@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace BlueMedia\BluePaymentGraphQl\Plugin;
 
-use Magento\Payment\Model\Checks\Composite;
 use Magento\Payment\Model\Checks\SpecificationFactory;
 
 class AddAmountCheckPlugin

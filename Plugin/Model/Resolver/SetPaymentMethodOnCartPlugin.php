@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace BlueMedia\BluePaymentGraphQl\Plugin\Model\Resolver;
@@ -17,14 +18,14 @@ class SetPaymentMethodOnCartPlugin
     /**
      * @var ConfigProvider
      */
-    private $configProvider;
-
-    /** @var PriceCurrencyInterface */
-    private $priceCurrency;
+    private ConfigProvider $configProvider;
 
     /**
-     * AvailablePaymentMethodsPlugin constructor.
-     *
+     * @var PriceCurrencyInterface
+     */
+    private PriceCurrencyInterface $priceCurrency;
+
+    /**
      * @param ConfigProvider $configProvider
      * @param PriceCurrencyInterface $priceCurrency
      */
@@ -45,18 +46,18 @@ class SetPaymentMethodOnCartPlugin
      * @param  array|null  $args
      *
      * @return array
-     * @throws GraphQlInputException
+     * @throws GraphQlInputException|NoSuchEntityException
      */
     public function beforeResolve(
         SetPaymentMethodOnCart $subject,
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ): array {
         $code = $args['input']['payment_method']['code'];
-        if (false !== strpos($code, Payment::SEPARATED_PREFIX_CODE)) {
+        if (str_contains($code, Payment::SEPARATED_PREFIX_CODE)) {
             $args['input']['payment_method']['bluepayment']['gateway_id'] = str_replace(
                 Payment::SEPARATED_PREFIX_CODE,
                 '',
@@ -128,22 +129,10 @@ class SetPaymentMethodOnCartPlugin
      */
     protected function validateBackUrl(string $backUrl): bool
     {
-        if (!$this->strStartsWith($backUrl, 'https://') && !$this->strStartsWith($backUrl, 'http://')) {
+        if (!str_starts_with($backUrl, 'https://') && !str_starts_with($backUrl, 'http://')) {
             return false;
         }
 
         return (bool) filter_var($backUrl, FILTER_VALIDATE_URL);
-    }
-
-    /**
-     * Returns whether string starts with given prefix.
-     *
-     * @param string $str
-     * @param string $needle
-     * @return bool
-     */
-    protected function strStartsWith(string $str, string $needle): bool
-    {
-        return $needle === "" || 0 === strncmp($str, $needle, \strlen($needle));
     }
 }

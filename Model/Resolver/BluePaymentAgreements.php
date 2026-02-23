@@ -10,9 +10,14 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 class BluePaymentAgreements implements ResolverInterface
 {
-    /** @var Webapi */
-    protected $webapi;
+    /**
+     * @var Webapi
+     */
+    protected Webapi $webapi;
 
+    /**
+     * @param Webapi $webapi
+     */
     public function __construct(Webapi $webapi)
     {
         $this->webapi = $webapi;
@@ -25,15 +30,15 @@ class BluePaymentAgreements implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if ($args['currency'] !== 'PLN') {
             // Currency other than PLN are not supported.
             return [];
         }
 
-        $result = $this->webapi->agreements($args['gateway_id'], $args['currency'], $args['locale']);
+        $result = $this->webapi->agreements((int) $args['gateway_id'], $args['currency'], $args['locale']);
         if (!$result || !is_array($result) || !isset($result['regulationList'])) {
             return [];
         }

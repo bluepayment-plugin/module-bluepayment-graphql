@@ -1,11 +1,12 @@
 ## Tabela kompatybilności
 
-| BlueMedia_BluePayment | BlueMedia_BluePaymentGraphQl | bluemedia/bluepayment-pwa (JS) | Magento       | Magento PWA |
-|-----------------------|------------------------------|--------------------------------|---------------|-------------|
-| 2.21.2                | 1.2.6                        | 0.0.8                          | 2.4.2 - 2.4.5 | 10.x        |
-| 2.17.1                | 1.2.4-1.2.5                  | 0.0.8                          | 2.4.2 - 2.4.3 | 10.x        |
-| 2.16.0                | 1.2.2                        | 0.0.4                          | 2.4.2 - 2.4.3 | 10.x        |
-| 2.15.0                | 1.1.0                        | 0.0.3                          | 2.4.2         | 10.x        |
+| BlueMedia_BluePayment | BlueMedia_BluePaymentGraphQl | bluemedia/bluepayment-pwa (JS) | Magento       | PHP         | Magento PWA |
+|-----------------------|------------------------------|--------------------------------|---------------|-------------|-------------|
+| 2.31.0                | 1.3.0                        | 0.0.8                          | 2.4.6 - 2.4.8 | 8.1 - 8.3   | 12.x - 14.x |
+| 2.21.2                | 1.2.6                        | 0.0.8                          | 2.4.2 - 2.4.5 | 7.4 - 8.1   | 10.x        |
+| 2.17.1                | 1.2.4-1.2.5                  | 0.0.8                          | 2.4.2 - 2.4.3 | 7.4 - 8.1   | 10.x        |
+| 2.16.0                | 1.2.2                        | 0.0.4                          | 2.4.2 - 2.4.3 | 7.4 - 8.1   | 10.x        |
+| 2.15.0                | 1.1.0                        | 0.0.3                          | 2.4.2         | 7.4         | 10.x        |
 
 ## Instalacja modułu
 
@@ -159,21 +160,29 @@ W odpowiedzi otrzymasz tablice obiektów:
 ```graphql
 gateway_id: ID!
 name: String!
+bank_name: String
+short_description: String
 description: String
 sort_order: Int
 type: String
 logo_url: String!
 is_separated_method: Boolean!
+min_amount: Float
+max_amount: Float
 ```
 | Klucz               | Opis                                                                                                                       |
 |---------------------|----------------------------------------------------------------------------------------------------------------------------|
 | gateway_id          | ID kanału płatności                                                                                                        |
 | name                | Nazwa kanału, zgodnie z ustawieniem w panelu administracyjnym Magento                                                      |
-| description         | Opis kanału (zarządzalny z poziomu panelu adminstracyjnego Magneto)                                                        |
-| sort_order          | Kolejność sortowania (zarządzalna z poziomu panelu adminstracyjnego Magneto)                                               |
-| type                | Typ kanału płatności (aktuaalnie dostępne opcje: PBL, Szybki Przelew, Raty online, Portfel elektroniczny, BLIK)            |
+| bank_name           | Nazwa banku powiązanego z kanałem płatności                                                                                |
+| short_description   | Krótki opis kanału płatności                                                                                               |
+| description         | Opis kanału (zarządzalny z poziomu panelu administracyjnego Magento)                                                       |
+| sort_order          | Kolejność sortowania (zarządzalna z poziomu panelu administracyjnego Magento)                                              |
+| type                | Typ kanału płatności (aktualnie dostępne opcje: PBL, Szybki Przelew, Raty online, Portfel elektroniczny, BLIK)             |
 | logo_url            | Adres URL do logotypu kanału. Możliwy do nadpisania w panelu administracyjnym Magento                                      |
-| is_separated_method | Czy kanał powinien być wyświetlany jako osobna metoda płatności (zgodnie z ustawieniem w panelu administracyjnym Magneto). |
+| is_separated_method | Czy kanał powinien być wyświetlany jako osobna metoda płatności (zgodnie z ustawieniem w panelu administracyjnym Magento)  |
+| min_amount          | Minimalna kwota transakcji dla danego kanału (null = brak limitu)                                                          |
+| max_amount          | Maksymalna kwota transakcji dla danego kanału (null = brak limitu)                                                         |
 
 <br>
 
