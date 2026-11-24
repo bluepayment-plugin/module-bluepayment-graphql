@@ -1,3 +1,6 @@
+## Wersja 1.2.1-p1
+- Poprawiliśmy obsługę żądań.
+
 ### 1.2.0
 - Obsługa zgód formalnych
 
