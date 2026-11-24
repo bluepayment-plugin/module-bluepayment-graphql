@@ -1,3 +1,6 @@
+## Wersja 1.2.4-p1
+- Poprawiliśmy obsługę żądań.
+
 ### 1.2.4
 - Dodaliśmy walidację parametrów dla mutacji `setPaymentMethodOnCart`
 - Zmieniliśmy typ `gateway_id` na string
