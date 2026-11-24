@@ -1,3 +1,6 @@
+## Wersja 1.2.5-p1
+- Poprawiliśmy obsługę żądań.
+
 ### 1.2.5
 - Dodaliśmy nazwę wybranego kanału płatności dla query `customer { orders (...) { items { payment_methods { name } } } } }`
 - Poprawiliśmy problem z brakiem `gateway_id` w query `cart { available_payment_methods { ... } }`
