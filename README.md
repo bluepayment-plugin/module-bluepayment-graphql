@@ -200,3 +200,8 @@ query getRedirectUrl($orderNumber: String!) {
 
 W odpowiedzi otrzymasz `redirectUrl` z adresem na jaki należy przekierować użytkownika.
 Po zakończeniu płatności, użytkownik zostanie przekierowany na adres podany w parametrze `back_url`
+
+
+### Query access
+
+redirectUrl requires ownership of the order. A guest must pass the associated masked cart_id; a customer must authenticate as the order owner. The order must belong to the current store.
