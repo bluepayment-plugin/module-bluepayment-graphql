@@ -1,3 +1,6 @@
+## Wersja 1.2.6-p1
+- Poprawiliśmy obsługę żądań.
+
 ### 1.2.6
 - Dostosowaliśmy moduł do wersji BlueMedia_BluePayment 2.21.2.
 - Dodaliśmy obsługę minimalnej i maksymalnej kwoty dla poszczególnych kanałów płatności.
