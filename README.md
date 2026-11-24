@@ -32,3 +32,8 @@ unzip -o -d app/code/BlueMedia/BluePaymentGraphQl bm-bluepayment-graph-ql-*.zip 
 - ```bin/magento setup:di:compile```
 - ```bin/magento cache:flush```
 2. Moduł został aktywowany.
+
+
+### Query access
+
+redirectUrl requires ownership of the order. A guest must pass the associated masked cart_id; a customer must authenticate as the order owner. The order must belong to the current store.
