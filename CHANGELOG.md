@@ -1,3 +1,6 @@
+## Wersja 1.3.0-p1
+- Poprawiliśmy obsługę żądań.
+
 ### 1.3.0
 - Dostosowaliśmy moduł do wersji BlueMedia_BluePayment 2.30.0 oraz Magento 2.4.8.
 - Dodaliśmy pełną zgodność z PHP 8.2 i PHP 8.3.
