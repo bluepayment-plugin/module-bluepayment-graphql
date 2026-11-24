@@ -1,6 +1,7 @@
 type Query {
     redirectUrl (
-        order_number: String!
+        order_number: String!,
+        cart_id: String @doc(description: "Masked cart ID associated with the order. Required for guest orders.")
     ): String! @resolver(class: "BlueMedia\\BluePaymentGraphQl\\Model\\Resolver\\RedirectUrl")
 
     bluepaymentOrder (
