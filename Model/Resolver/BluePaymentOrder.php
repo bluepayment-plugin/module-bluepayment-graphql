@@ -61,8 +61,9 @@ class BluePaymentOrder implements ResolverInterface
         /** @var Order $order */
         $order = $this->order->loadByIncrementId($orderNumber);
 
-        /** @var Order\Payment $payment */
-        $payment = $order->getPayment();
+        if (!$order->getId()) {
+            throw new GraphQlAuthenticationException(__('Invalid hash.'));
+        }
 
         $currency = $order->getOrderCurrencyCode();
 
@@ -75,11 +76,20 @@ class BluePaymentOrder implements ResolverInterface
             ScopeInterface::SCOPE_STORE
         );
 
-        $hashData = [$serviceId, $order->getIncrementId(), $sharedKey];
-
-        if ($this->helper->generateAndReturnHash($hashData) !== $hash) {
+        if (!is_string($hash) || !is_string($sharedKey)
+            || empty(trim((string) $serviceId)) || empty(trim($sharedKey))
+        ) {
             throw new GraphQlAuthenticationException(__('Invalid hash.'));
         }
+
+        $hashData = [$serviceId, $order->getIncrementId(), $sharedKey];
+
+        if (!hash_equals($this->helper->generateAndReturnHash($hashData), $hash)) {
+            throw new GraphQlAuthenticationException(__('Invalid hash.'));
+        }
+
+        /** @var Order\Payment $payment */
+        $payment = $order->getPayment();
 
         return [
             'created_at' => $order->getCreatedAt(),

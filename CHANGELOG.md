@@ -1,3 +1,6 @@
+## Wersja 1.2.3-p1
+- Poprawiliśmy obsługę żądań.
+
 ### 1.2.3
 - Dodaliśmy **gateway_id** do `cart { available_payment_methods { ... } }`
 - W mutacji **setPaymentMethodOnCart** jako code możemy już wysłać kod w formacie `bluepayment_id`, który jest zwracany przez `available_payment_methods`
